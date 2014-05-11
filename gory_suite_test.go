@@ -5,6 +5,7 @@ import (
 	"github.com/modocache/gory"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
+	"os/exec"
 	"unsafe"
 
 	"testing"
@@ -50,6 +51,10 @@ type Struct struct {
 
 type Embedded struct {
 	Builtin
+}
+
+type Lazily struct {
+	Uuid string
 }
 
 var _ = BeforeSuite(func() {
@@ -101,6 +106,13 @@ var _ = BeforeSuite(func() {
 		factory["Int"] = gory.Sequence(gory.IntSequencer)
 		factory["String"] = gory.Sequence(func(n int) interface{} {
 			return fmt.Sprintf("string %d", n)
+		})
+	})
+
+	gory.Define("lazily", Lazily{}, func(factory gory.Factory) {
+		factory["Uuid"] = gory.Lazy(func() interface{} {
+			out, _ := exec.Command("uuidgen").Output()
+			return string(out)
 		})
 	})
 })

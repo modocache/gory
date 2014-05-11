@@ -89,7 +89,7 @@ func Build(definitionName string) interface{} {
 			panic(message)
 		}
 
-		if reflect.TypeOf(value) == reflect.TypeOf(Sequence(IntSequencer)) {
+		if isLazy(value) {
 			value = value.(next)()
 		}
 
@@ -97,4 +97,10 @@ func Build(definitionName string) interface{} {
 	}
 
 	return instance.Interface()
+}
+
+func isLazy(value interface{}) bool {
+	return reflect.TypeOf(value) == reflect.TypeOf(Lazy(func() interface{} {
+		return nil
+	}))
 }

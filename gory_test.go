@@ -138,6 +138,16 @@ var _ = Describe("Gory", func() {
 			})
 		})
 
+		Describe("lazy values", func() {
+			var name string
+			BeforeEach(func() { name = "lazily" })
+			It("evaluates the values when they're built", func() {
+				left := gory.Build(name).(*Lazily)
+				right := gory.Build(name).(*Lazily)
+				Expect(left.Uuid).ToNot((Equal(right.Uuid)))
+			})
+		})
+
 		Describe("sequenced values", func() {
 			var name string
 			BeforeEach(func() { name = "sequenced" })

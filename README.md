@@ -24,8 +24,15 @@ gory.Define("user", User{}, func(factory gory.Factory) {
     factory["FirstName"] = "John"
     factory["LastName"] = "Doe"
     factory["Admin"] = false
+
+    // 'n' in email is incremented each time the factory is built
     factory["Email"] = gory.Sequence(func(n int) interface{} {
         return fmt.Sprintf("john-doe-%d@example.com", n)
+    })
+
+    // time.Now() is evaluated when the factory is built
+    factory["Created"] = gory.Lazy(func() interface{} {
+        return time.Now()
     })
 })
 ```
@@ -43,7 +50,6 @@ See `gory_test.go` for more examples of using factories.
 
 ## Coming Soon
 
-- Lazy attributes
 - Aliases
 - Dependent attributes
 - Transient attributes

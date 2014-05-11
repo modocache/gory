@@ -5,7 +5,6 @@ A function that returns a value to be set on a Factory.
 n is incremented each time the Factory is built.
 */
 type Sequencer func(n int) interface{}
-type next func() interface{}
 
 /*
 Used to set an sequenced value on a Factory.
@@ -21,11 +20,11 @@ incremented value for n.
 */
 func Sequence(sequencer Sequencer) next {
 	n := 0
-	return func() interface{} {
+	return Lazy(func() interface{} {
 		value := sequencer(n)
 		n += 1
 		return value
-	}
+	})
 }
 
 /*
