@@ -16,16 +16,16 @@ your struct fields.
 
 Example:
 
-```
-gory.Define("person", Person{}, func(factory gory.Factory) {
-	factory["FirstName"] = "Jane"
-	factory["LastName"] = "Doe"
-	factory["Admin"] = false
-})
+	gory.Define("person", Person{}, func(factory gory.Factory) {
+		factory["FirstName"] = "Jane"
+		factory["LastName"] = "Doe"
+		factory["Admin"] = false
+	})
 
 Later, when you build the object, the FirstName, LastName,
 and Admin fields will be set to the parameters you specified.
-```
+If you attempt to set fields that don't exist or are not exported,
+the Build() function will panic once called.
 */
 type FactoryBuilder func(factory Factory)
 
@@ -63,14 +63,14 @@ func Define(definitionName string, instance interface{}, builder FactoryBuilder)
 /*
 Returns an instance of the struct defined using the definitionName parameter
 and the Define function. If no matching definition exists, this function
-panics.
+panics. It also panics if an attempt to set an invalid field was made from
+within the Define() function.
 
 Example:
 
-```
-person := gory.Build("person").(*Person)
-fmt.Println(person.FirstName) // "Jane"
-```
+	person := gory.Build("person").(*Person)
+	fmt.Println(person.FirstName) // "Jane"
+
 */
 func Build(definitionName string) interface{} {
 	definition := defined.get(definitionName)
