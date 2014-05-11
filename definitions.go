@@ -6,11 +6,6 @@ import (
 	"strings"
 )
 
-/*
-A Factory maps field names to values.
-*/
-type Factory map[string]interface{}
-
 type definition struct {
 	structType reflect.Type
 	factory    Factory

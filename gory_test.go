@@ -162,4 +162,27 @@ var _ = Describe("Gory", func() {
 			})
 		})
 	})
+
+	Describe("BuildWithParams()", func() {
+		Context("when given an invalid field name", func() {
+			It("panics", func() {
+				build := func() {
+					gory.BuildWithParams("builtin", gory.Factory{"Name": "Bob"})
+				}
+				Expect(build).To(Panic())
+			})
+		})
+
+		Context("when given values valid field names", func() {
+			It("uses those values instead of the Factory values", func() {
+				builtin := gory.BuildWithParams("builtin", gory.Factory{
+					"Int":    21,
+					"String": "hello",
+				}).(*Builtin)
+				Expect(builtin.Int).To(Equal(21))
+				Expect(builtin.String).To(Equal("hello"))
+				Expect(builtin.Int8).To(Equal(int8(8)))
+			})
+		})
+	})
 })

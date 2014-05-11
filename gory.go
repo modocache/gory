@@ -74,18 +74,43 @@ Example:
 */
 func Build(definitionName string) interface{} {
 	definition := defined.get(definitionName)
-	instance := reflect.New(definition.structType)
+	return build(definition.structType, definition.factory)
+}
 
-	for name, value := range definition.factory {
+/*
+Returns an instance of the struct defined by definitionName, but using the
+specified parameters instead of the defined factory's values. If names of
+fields that don't exist or are not exported are specified, the function panics.
+
+Example:
+
+	person := gory.BuildWithParams("person", Person{}, {
+		"Name": "John"
+	}).(*Person)
+	fmt.Println(person.Name) // "John" instead of Factory value
+
+*/
+func BuildWithParams(definitionName string, params Factory) interface{} {
+	definition := defined.get(definitionName)
+	factory := definition.factory.copy()
+	factory.merge(params)
+
+	return build(definition.structType, factory)
+}
+
+func build(structType reflect.Type, factory Factory) interface{} {
+	instance := reflect.New(structType)
+
+	for name, value := range factory {
 		field := instance.Elem().FieldByName(name)
 		if !field.IsValid() {
 			message := fmt.Sprintf("gory: '%s' is not a valid field on %s",
-				name, definition.structType.Name())
+				name, structType.Name())
 			panic(message)
 		}
 		if !field.CanSet() {
 			message := fmt.Sprintf("gory: Field '%s' on %s is not an exported struct field; its value cannot be set",
-				name, definition.structType.Name())
+				name, structType.Name())
 			panic(message)
 		}
 
