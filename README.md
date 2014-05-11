@@ -14,6 +14,9 @@ To install, just `go get` it:
 go get github.com/modocache/gory
 ```
 
+gory is [fully documented](https://godoc.org/github.com/modocache/gory), but
+below are some examples to get you started.
+
 ### Defining Factories
 
 Define factories that may be used during any test. Works great in
