@@ -1,6 +1,6 @@
 # gory
 
-[![Build Status](https://drone.io/github.com/modocache/gory/status.png)](https://drone.io/github.com/modocache/gory/latest)
+[![Build Status](https://drone.io/github.com/modocache/gory/status.png?refresh=1)](https://drone.io/github.com/modocache/gory/latest)
 [![Coverage Status](https://coveralls.io/repos/modocache/gory/badge.png?branch=master)](https://coveralls.io/r/modocache/gory?branch=master)
 [![GoDoc](https://godoc.org/github.com/modocache/gory?status.png)](https://godoc.org/github.com/modocache/gory)
 
@@ -45,8 +45,13 @@ See `gory_suite_test.go` for more examples of defining factories.
 ### Using Factories
 
 ```go
-user := gory.Build("user").(*User)
-fmt.Println(user.FirstName) // "John"
+john := gory.Build("user").(*User)
+fmt.Println(john.FirstName) // "John"
+
+jane := gory.BuildWithParams("user", gory.Factory{
+    "FirstName": "Jane"
+}).(*User)
+fmt.Println(jane.FirstName) // "Jane"
 ```
 
 See `gory_test.go` for more examples of using factories.
