@@ -1,6 +1,7 @@
 package gory_test
 
 import (
+	"fmt"
 	"github.com/modocache/gory"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
@@ -94,6 +95,13 @@ var _ = BeforeSuite(func() {
 
 	gory.Define("embedded", Embedded{}, func(factory gory.Factory) {
 		factory["Int"] = 1
+	})
+
+	gory.Define("sequenced", Builtin{}, func(factory gory.Factory) {
+		factory["Int"] = gory.Sequence(gory.IntSequencer)
+		factory["String"] = gory.Sequence(func(n int) interface{} {
+			return fmt.Sprintf("string %d", n)
+		})
 	})
 })
 

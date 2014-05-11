@@ -24,6 +24,9 @@ gory.Define("user", User{}, func(factory gory.Factory) {
     factory["FirstName"] = "John"
     factory["LastName"] = "Doe"
     factory["Admin"] = false
+    factory["Email"] = gory.Sequence(func(n int) interface{} {
+        return fmt.Sprintf("john-doe-%d@example.com", n)
+    })
 })
 ```
 
@@ -46,7 +49,6 @@ See `gory_test.go` for more examples of using factories.
 - Transient attributes
 - Associations
 - Inheritance
-- Sequences
 - Traits
 - Callbacks
 - ...and pretty much [anything else factory_girl can do](https://github.com/thoughtbot/factory_girl/blob/master/GETTING_STARTED.md).

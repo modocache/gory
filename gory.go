@@ -62,7 +62,7 @@ func Define(definitionName string, instance interface{}, builder FactoryBuilder)
 
 /*
 Returns an instance of the struct defined using the definitionName parameter
-and the Define function. If no matching definition exists, this function
+and the Define() function. If no matching definition exists, this function
 panics. It also panics if an attempt to set an invalid field was made from
 within the Define() function.
 
@@ -87,6 +87,10 @@ func Build(definitionName string) interface{} {
 			message := fmt.Sprintf("gory: Field '%s' on %s is not an exported struct field; its value cannot be set",
 				name, definition.structType.Name())
 			panic(message)
+		}
+
+		if reflect.TypeOf(value) == reflect.TypeOf(Sequence(IntSequencer)) {
+			value = value.(next)()
 		}
 
 		field.Set(reflect.ValueOf(value))

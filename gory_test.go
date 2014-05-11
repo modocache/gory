@@ -137,5 +137,19 @@ var _ = Describe("Gory", func() {
 				Expect(embedded.Int).To(Equal(1))
 			})
 		})
+
+		Describe("sequenced values", func() {
+			var name string
+			BeforeEach(func() { name = "sequenced" })
+			It("sequences the values", func() {
+				first := gory.Build(name).(*Builtin)
+				second := gory.Build(name).(*Builtin)
+
+				Expect(first.Int).To(Equal(0))
+				Expect(first.String).To(Equal("string 0"))
+				Expect(second.Int).To(Equal(1))
+				Expect(second.String).To(Equal("string 1"))
+			})
+		})
 	})
 })
